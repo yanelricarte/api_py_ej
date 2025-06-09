@@ -1,7 +1,11 @@
-# app.py
+import os
 from flask import Flask, request, jsonify, render_template
+from dotenv import load_dotenv
 import requests
 from datetime import datetime
+
+# Carga las variables definidas en .env
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -54,7 +58,11 @@ class ConsultorClima:
         """
         return resultado.strip()
 
-API_KEY = "66e8e227923985e194406900bd96e97d"  # Reemplazá con tu clave real
+# Leemos la API key desde la variable de entorno
+API_KEY = os.getenv("API_KEY")
+if not API_KEY:
+    raise RuntimeError("La variable de entorno API_KEY no está definida")
+
 consultor = ConsultorClima(API_KEY)
 
 @app.route("/")
