@@ -1,55 +1,25 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Consultor del Clima</title>
-    <link rel="stylesheet" href="estilos.css">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>🌤️ Consultor del Clima</h1>
-    <form id="form-clima">
-        <label for="ciudad">Nombre de la ciudad:</label><br />
-        <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Buenos Aires" required />
-        <button type="submit">Consultar clima</button>
-    </form>
-    <pre id="resultado"></pre>
-
-    <script>
-        const form = document.getElementById("form-clima");
-        const resultado = document.getElementById("resultado");
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            resultado.textContent = "⏳ Consultando clima…";
-
-            // Prueba fija para verificar el DOM:
-            // resultado.textContent = "✅ El listener funciona";
-            // return;
-
-            const ciudad = form.ciudad.value.trim();
-            console.log("Ciudad ingresada:", ciudad);
-
-            try {
-                const response = await fetch(`/clima_actual?ciudad=${encodeURIComponent(ciudad)}`);
-                console.log("Fetch status:", response.status);
-                const data = await response.json();
-                console.log("Datos recibidos:", data);
-
-                if (!response.ok) {
-                    resultado.textContent = `❌ Error: ${data.error || response.statusText}`;
-                } else if (data.error) {
-                    resultado.textContent = `❌ ${data.error}`;
-                } else {
-                    resultado.textContent = data.resultado;
-                }
-            } catch (error) {
-                console.error("Error en fetch:", error);
-                resultado.textContent = `❌ Error de conexión: ${error.message}`;
-            }
-        });
-    </script>
+    <div class="container">
+        <h1>🌤️ Consultor del Clima</h1>
+        <form id="form-clima" class="form-clima">
+            <div class="input-group">
+                <label for="ciudad">Nombre de la ciudad:</label>
+                <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Buenos Aires" required />
+                <button type="submit">Consultar clima</button>
+            </div>
+        </form>
+        <div id="loading" class="loading hidden">⏳ Consultando clima…</div>
+        <pre id="resultado" class="resultado"></pre>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
